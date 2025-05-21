@@ -31,7 +31,10 @@ const Login = () => {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    await login(data);
+    await login({
+      email: data.email,
+      password: data.password,
+    });
   };
 
   return (

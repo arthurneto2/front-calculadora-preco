@@ -44,7 +44,11 @@ const Register = () => {
 
   const onSubmit = async (data: RegisterFormValues) => {
     const { confirmPassword, ...userData } = data;
-    await registerUser(userData);
+    await registerUser({
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+    });
   };
 
   return (
