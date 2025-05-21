@@ -42,6 +42,15 @@ const ProductList = () => {
     }
   };
 
+  // Helper function to safely format numbers
+  const formatCurrency = (value?: number | null) => {
+    return value != null ? `R$ ${value.toFixed(2)}` : 'N/A';
+  };
+
+  const formatPercentage = (value?: number | null) => {
+    return value != null ? `${value.toFixed(2)}%` : 'N/A';
+  };
+
   if (isLoading) return <div className="flex justify-center p-8">Carregando produtos...</div>;
   
   if (error) return <div className="text-red-500 p-4">Erro ao carregar produtos</div>;
@@ -75,9 +84,9 @@ const ProductList = () => {
               <TableRow key={product.id}>
                 <TableCell>{product.id}</TableCell>
                 <TableCell>{product.nome}</TableCell>
-                <TableCell>R$ {product.precoVenda.toFixed(2)}</TableCell>
-                <TableCell>R$ {product.custoTotal.toFixed(2)}</TableCell>
-                <TableCell>{product.margemDeLucro.toFixed(2)}%</TableCell>
+                <TableCell>{formatCurrency(product.precoVenda)}</TableCell>
+                <TableCell>{formatCurrency(product.custoTotal)}</TableCell>
+                <TableCell>{formatPercentage(product.margemDeLucro)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <Link to={`/products/edit/${product.id}`}>
