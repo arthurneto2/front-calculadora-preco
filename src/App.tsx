@@ -16,6 +16,7 @@ import ProductDetail from "./pages/ProductDetail";
 import InsumoList from "./pages/InsumoList";
 import InsumoForm from "./pages/InsumoForm";
 import InsumoDetail from "./pages/InsumoDetail";
+import ProdutoCalculadora from "./pages/ProdutoCalculadora";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Calculator />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/produto-calculadora" 
+                element={
+                  <ProtectedRoute>
+                    <ProdutoCalculadora />
                   </ProtectedRoute>
                 } 
               />
