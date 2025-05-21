@@ -1,6 +1,7 @@
 
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import Navbar from "./Navbar";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,7 +19,14 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Navbar />
+      <main className="mt-4">
+        {children}
+      </main>
+    </>
+  );
 };
 
 export default ProtectedRoute;

@@ -10,6 +10,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Calculator from "./pages/Calculator";
 import NotFound from "./pages/NotFound";
+import ProductList from "./pages/ProductList";
+import ProductForm from "./pages/ProductForm";
+import ProductDetail from "./pages/ProductDetail";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +40,38 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Calculator />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/products" 
+                element={
+                  <ProtectedRoute>
+                    <ProductList />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/products/new" 
+                element={
+                  <ProtectedRoute>
+                    <ProductForm />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/products/edit/:id" 
+                element={
+                  <ProtectedRoute>
+                    <ProductForm />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/products/:id" 
+                element={
+                  <ProtectedRoute>
+                    <ProductDetail />
                   </ProtectedRoute>
                 } 
               />
