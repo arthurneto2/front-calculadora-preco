@@ -18,4 +18,3 @@ api.interceptors.request.use((config) => {
 });
 
 export default api;
-</lov-add-dependency>axios@latest</lov-add-dependency>
