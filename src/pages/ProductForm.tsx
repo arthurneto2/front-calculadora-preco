@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -43,15 +42,19 @@ const ProductForm = () => {
     queryKey: ['product', id],
     queryFn: () => getProductById(Number(id)),
     enabled: isEditing,
-    onSuccess: (data) => {
-      form.reset({
-        nome: data.nome,
-        precoVenda: data.precoVenda,
-        custoTotal: data.custoTotal,
-        margemDeLucro: data.margemDeLucro,
-      });
-    },
   });
+
+  // Use useEffect to set form values when product data is loaded
+  useEffect(() => {
+    if (product) {
+      form.reset({
+        nome: product.nome,
+        precoVenda: product.precoVenda,
+        custoTotal: product.custoTotal,
+        margemDeLucro: product.margemDeLucro,
+      });
+    }
+  }, [product, form]);
 
   const createMutation = useMutation({
     mutationFn: createProduct,
@@ -93,9 +96,20 @@ const ProductForm = () => {
 
   const onSubmit = (data: ProductFormValues) => {
     if (isEditing && product) {
-      updateMutation.mutate({ ...data, id: product.id });
+      updateMutation.mutate({
+        id: product.id,
+        nome: data.nome,
+        precoVenda: data.precoVenda,
+        custoTotal: data.custoTotal,
+        margemDeLucro: data.margemDeLucro,
+      });
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate({
+        nome: data.nome,
+        precoVenda: data.precoVenda,
+        custoTotal: data.custoTotal,
+        margemDeLucro: data.margemDeLucro,
+      });
     }
   };
 
