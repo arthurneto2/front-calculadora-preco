@@ -13,6 +13,9 @@ import NotFound from "./pages/NotFound";
 import ProductList from "./pages/ProductList";
 import ProductForm from "./pages/ProductForm";
 import ProductDetail from "./pages/ProductDetail";
+import InsumoList from "./pages/InsumoList";
+import InsumoForm from "./pages/InsumoForm";
+import InsumoDetail from "./pages/InsumoDetail";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +75,38 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <ProductDetail />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/insumos" 
+                element={
+                  <ProtectedRoute>
+                    <InsumoList />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/insumos/new" 
+                element={
+                  <ProtectedRoute>
+                    <InsumoForm />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/insumos/edit/:id" 
+                element={
+                  <ProtectedRoute>
+                    <InsumoForm />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/insumos/:id" 
+                element={
+                  <ProtectedRoute>
+                    <InsumoDetail />
                   </ProtectedRoute>
                 } 
               />
