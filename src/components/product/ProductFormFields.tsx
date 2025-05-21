@@ -30,14 +30,14 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
         name="precoVenda"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Preço de Venda</FormLabel>
+            <FormLabel>Preço de Venda (opcional)</FormLabel>
             <FormControl>
               <Input 
                 type="number" 
                 step="0.01" 
-                placeholder="0.00" 
+                placeholder="Será calculado posteriormente" 
                 {...field} 
-                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
               />
             </FormControl>
             <FormMessage />
@@ -50,14 +50,14 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
         name="custoTotal"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Custo Total</FormLabel>
+            <FormLabel>Custo Total (opcional)</FormLabel>
             <FormControl>
               <Input 
                 type="number" 
                 step="0.01" 
-                placeholder="0.00" 
+                placeholder="Será calculado posteriormente" 
                 {...field}
-                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
               />
             </FormControl>
             <FormMessage />
