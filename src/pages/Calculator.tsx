@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -9,8 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { calculateProductPrice, ProductCalculationResponse } from '@/services/productService';
-import { Calculator as CalculatorIcon, LogOut } from 'lucide-react';
+import { Calculator as CalculatorIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { AppSidebar } from '@/components/AppSidebar';
 
 const calculatorSchema = z.object({
   productName: z.string().min(1, 'Nome do produto é obrigatório'),
@@ -25,7 +25,7 @@ const Calculator = () => {
   const [result, setResult] = useState<ProductCalculationResponse | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const { toast } = useToast();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   
   const form = useForm<CalculatorFormValues>({
     resolver: zodResolver(calculatorSchema),
@@ -64,21 +64,11 @@ const Calculator = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <header className="bg-white shadow">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Calculadora de Preços</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm">Olá, {user?.user.name}</span>
-            <Button variant="outline" size="sm" onClick={logout}>
-              <LogOut size={16} className="mr-2" />
-              Sair
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div className="flex h-screen">
+      <AppSidebar />
+      <div className="flex-1 overflow-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Calculadora de Preços</h1>
 
-      <main className="container mx-auto flex-1 p-4">
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
@@ -184,7 +174,7 @@ const Calculator = () => {
             </Card>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

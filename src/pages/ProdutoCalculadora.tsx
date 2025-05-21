@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllProducts, getProductById, adicionarIngrediente, calcularPrecoProduto } from '@/services/productService';
 import { getAllInsumos } from '@/services/insumoService';
-import { ProductDto, AdicionarIngredienteDto } from '@/types/product';
+import { ProductDto, AdicionarIngredienteDto, ComponenteProdutoDto } from '@/types/product';
 import { InsumoDto } from '@/types/insumo';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Calculator, Plus, Trash } from 'lucide-react';
+import { Calculator, Plus } from 'lucide-react';
+import { AppSidebar } from '@/components/AppSidebar';
 
 // Schema para adicionar ingrediente
 const adicionarIngredienteSchema = z.object({
@@ -177,213 +178,216 @@ const ProdutoCalculadora = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Calculadora de Produtos</h1>
-      
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Selecionar Produto</CardTitle>
-            <CardDescription>
-              Escolha um produto para adicionar ingredientes e calcular o preço
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...produtoForm}>
-              <form onSubmit={produtoForm.handleSubmit(handleProdutoSubmit)} className="space-y-4">
-                <FormField
-                  control={produtoForm.control}
-                  name="produtoId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Produto</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione um produto" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {produtos?.map((produto) => (
-                            <SelectItem key={produto.id} value={String(produto.id)}>
-                              {produto.nome}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Selecionar Produto</Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-
-        {selectedProduct && (
+    <div className="flex h-screen">
+      <AppSidebar />
+      <div className="flex-1 overflow-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Calculadora de Produtos</h1>
+        
+        <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Detalhes do Produto</CardTitle>
+              <CardTitle>Selecionar Produto</CardTitle>
               <CardDescription>
-                Informações do produto selecionado
+                Escolha um produto para adicionar ingredientes e calcular o preço
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="text-sm font-medium">Nome:</div>
-                  <div className="text-sm">{selectedProduct.nome}</div>
-                  
-                  <div className="text-sm font-medium">Custo Total:</div>
-                  <div className="text-sm">
-                    R$ {selectedProduct.custoTotal !== undefined ? selectedProduct.custoTotal.toFixed(2) : 'Não calculado'}
-                  </div>
-                  
-                  <div className="text-sm font-medium">Margem de Lucro:</div>
-                  <div className="text-sm">{selectedProduct.margemDeLucro?.toFixed(2)}%</div>
-                  
-                  <div className="text-xl font-bold text-primary mt-4">Preço de Venda:</div>
-                  <div className="text-xl font-bold text-primary mt-4">
-                    R$ {selectedProduct.precoVenda !== undefined ? selectedProduct.precoVenda.toFixed(2) : 'Não calculado'}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                onClick={handleCalcularPreco} 
-                disabled={calcularPrecoMutation.isPending} 
-                className="w-full"
-              >
-                <Calculator className="mr-2 h-4 w-4" />
-                {calcularPrecoMutation.isPending ? 'Calculando...' : 'Calcular Preço'}
-              </Button>
-            </CardFooter>
-          </Card>
-        )}
-      </div>
-
-      {selectedProductId && (
-        <div className="mt-6 grid gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Adicionar Ingrediente</CardTitle>
-              <CardDescription>
-                Adicione ingredientes ao produto selecionado
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Form {...ingredienteForm}>
-                <form onSubmit={ingredienteForm.handleSubmit(handleIngredienteSubmit)} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={ingredienteForm.control}
-                      name="insumoId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Insumo</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Selecione um insumo" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {insumos?.map((insumo) => (
-                                <SelectItem key={insumo.id} value={String(insumo.id)}>
-                                  {insumo.nome} - R$ {insumo.custoUn.toFixed(2)}/{insumo.unMedida}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={ingredienteForm.control}
-                      name="quantidade"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Quantidade</FormLabel>
+              <Form {...produtoForm}>
+                <form onSubmit={produtoForm.handleSubmit(handleProdutoSubmit)} className="space-y-4">
+                  <FormField
+                    control={produtoForm.control}
+                    name="produtoId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Produto</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <FormControl>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              placeholder="0.00"
-                              {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                            />
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione um produto" />
+                            </SelectTrigger>
                           </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button 
-                    type="submit" 
-                    disabled={adicionarIngredienteMutation.isPending}
-                    className="w-full"
-                  >
-                    <Plus className="mr-2 h-4 w-4" />
-                    {adicionarIngredienteMutation.isPending ? 'Adicionando...' : 'Adicionar Ingrediente'}
-                  </Button>
+                          <SelectContent>
+                            {produtos?.map((produto) => (
+                              <SelectItem key={produto.id} value={String(produto.id)}>
+                                {produto.nome}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit">Selecionar Produto</Button>
                 </form>
               </Form>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Lista de Ingredientes</CardTitle>
-              <CardDescription>
-                Ingredientes adicionados ao produto
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {ingredientes.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Ingrediente</TableHead>
-                      <TableHead>Quantidade</TableHead>
-                      <TableHead>Custo Unitário</TableHead>
-                      <TableHead>Custo Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {ingredientes.map((ingrediente) => {
-                      const insumoNome = ingrediente.insumoNome || getInsumoNome(ingrediente.insumoId);
-                      const custoUn = ingrediente.insumoCustoUn || getInsumoCustoUn(ingrediente.insumoId);
-                      const custoTotal = custoUn * ingrediente.quantidade;
-                      
-                      return (
-                        <TableRow key={ingrediente.id || `${ingrediente.insumoId}-${ingrediente.quantidade}`}>
-                          <TableCell>{insumoNome}</TableCell>
-                          <TableCell>{ingrediente.quantidade}</TableCell>
-                          <TableCell>R$ {custoUn.toFixed(2)}</TableCell>
-                          <TableCell>R$ {custoTotal.toFixed(2)}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              ) : (
-                <div className="text-center py-4 text-gray-500">
-                  Nenhum ingrediente adicionado
+          {selectedProduct && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Detalhes do Produto</CardTitle>
+                <CardDescription>
+                  Informações do produto selecionado
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="text-sm font-medium">Nome:</div>
+                    <div className="text-sm">{selectedProduct.nome}</div>
+                    
+                    <div className="text-sm font-medium">Custo Total:</div>
+                    <div className="text-sm">
+                      R$ {selectedProduct.custoTotal !== undefined ? selectedProduct.custoTotal.toFixed(2) : 'Não calculado'}
+                    </div>
+                    
+                    <div className="text-sm font-medium">Margem de Lucro:</div>
+                    <div className="text-sm">{selectedProduct.margemDeLucro?.toFixed(2)}%</div>
+                    
+                    <div className="text-xl font-bold text-primary mt-4">Preço de Venda:</div>
+                    <div className="text-xl font-bold text-primary mt-4">
+                      R$ {selectedProduct.precoVenda !== undefined ? selectedProduct.precoVenda.toFixed(2) : 'Não calculado'}
+                    </div>
+                  </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  onClick={handleCalcularPreco} 
+                  disabled={calcularPrecoMutation.isPending} 
+                  className="w-full"
+                >
+                  <Calculator className="mr-2 h-4 w-4" />
+                  {calcularPrecoMutation.isPending ? 'Calculando...' : 'Calcular Preço'}
+                </Button>
+              </CardFooter>
+            </Card>
+          )}
         </div>
-      )}
+
+        {selectedProductId && (
+          <div className="mt-6 grid gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Adicionar Ingrediente</CardTitle>
+                <CardDescription>
+                  Adicione ingredientes ao produto selecionado
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Form {...ingredienteForm}>
+                  <form onSubmit={ingredienteForm.handleSubmit(handleIngredienteSubmit)} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={ingredienteForm.control}
+                        name="insumoId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Insumo</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione um insumo" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {insumos?.map((insumo) => (
+                                  <SelectItem key={insumo.id} value={String(insumo.id)}>
+                                    {insumo.nome} - R$ {insumo.custoUn.toFixed(2)}/{insumo.unMedida}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={ingredienteForm.control}
+                        name="quantidade"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Quantidade</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                placeholder="0.00"
+                                {...field}
+                                onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      disabled={adicionarIngredienteMutation.isPending}
+                      className="w-full"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      {adicionarIngredienteMutation.isPending ? 'Adicionando...' : 'Adicionar Ingrediente'}
+                    </Button>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Lista de Ingredientes</CardTitle>
+                <CardDescription>
+                  Ingredientes adicionados ao produto
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {ingredientes.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Ingrediente</TableHead>
+                        <TableHead>Quantidade</TableHead>
+                        <TableHead>Custo Unitário</TableHead>
+                        <TableHead>Custo Total</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {ingredientes.map((ingrediente) => {
+                        const insumoNome = ingrediente.insumoNome || getInsumoNome(ingrediente.insumoId);
+                        const custoUn = ingrediente.insumoCustoUn || getInsumoCustoUn(ingrediente.insumoId);
+                        const custoTotal = custoUn * ingrediente.quantidade;
+                        
+                        return (
+                          <TableRow key={ingrediente.id || `${ingrediente.insumoId}-${ingrediente.quantidade}`}>
+                            <TableCell>{insumoNome}</TableCell>
+                            <TableCell>{ingrediente.quantidade}</TableCell>
+                            <TableCell>R$ {custoUn.toFixed(2)}</TableCell>
+                            <TableCell>R$ {custoTotal.toFixed(2)}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="text-center py-4 text-gray-500">
+                    Nenhum ingrediente adicionado
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

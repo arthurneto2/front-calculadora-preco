@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,7 +40,7 @@ export const useProductForm = () => {
   });
 
   // Update form values when product data is loaded
-  useState(() => {
+  useEffect(() => {
     if (product) {
       form.reset({
         nome: product.nome,
@@ -49,7 +49,7 @@ export const useProductForm = () => {
         margemDeLucro: product.margemDeLucro,
       });
     }
-  });
+  }, [product, form]);
 
   const createMutation = useMutation({
     mutationFn: createProduct,
