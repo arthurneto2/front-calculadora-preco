@@ -1,6 +1,8 @@
 
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 import Navbar from "./Navbar";
 
 interface ProtectedRouteProps {
@@ -20,12 +22,19 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   return (
-    <>
-      <Navbar />
-      <main className="mt-4">
-        {children}
-      </main>
-    </>
+    <SidebarProvider defaultOpen={true}>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <div className="flex flex-col w-full">
+          <Navbar />
+          <SidebarInset>
+            <div className="p-4">
+              {children}
+            </div>
+          </SidebarInset>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
 
