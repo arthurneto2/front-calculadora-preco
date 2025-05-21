@@ -6,3 +6,10 @@ export interface ProductDto {
   custoTotal: number;
   margemDeLucro: number;
 }
+
+export type ProductFormValues = {
+  nome: string;
+  precoVenda: number;
+  custoTotal: number;
+  margemDeLucro: number;
+};
