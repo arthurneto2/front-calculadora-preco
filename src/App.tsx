@@ -47,14 +47,6 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/products" 
-                element={
-                  <ProtectedRoute>
-                    <ProductList />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
                 path="/products/new" 
                 element={
                   <ProtectedRoute>
