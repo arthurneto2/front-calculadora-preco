@@ -44,7 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         title: 'Login bem-sucedido',
         description: `Bem-vindo, ${data.user.name}!`,
       });
-      navigate('/calculator');
+      // Alterando o redirecionamento após login para a página inicial "/" em vez de "/calculator"
+      navigate('/');
     } catch (error: any) {
       toast({
         title: 'Erro ao fazer login',
