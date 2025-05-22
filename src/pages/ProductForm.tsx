@@ -22,8 +22,6 @@ const ProductForm = () => {
     if (product) {
       form.reset({
         nome: product.nome,
-        precoVenda: product.precoVenda,
-        custoTotal: product.custoTotal,
         margemDeLucro: product.margemDeLucro,
       });
     }
