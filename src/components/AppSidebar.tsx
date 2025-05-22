@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Calculator, BarChart2, Package, Equal } from "lucide-react";
+import { BarChart2, Package, Equal } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Sidebar,
@@ -28,10 +28,10 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Calculadora">
-              <Link to="/calculator">
-                <Calculator className="h-4 w-4" />
-                <span>Calculadora</span>
+            <SidebarMenuButton asChild tooltip="Produtos">
+              <Link to="/">
+                <BarChart2 className="h-4 w-4" />
+                <span>Produtos</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -40,14 +40,6 @@ export function AppSidebar() {
               <Link to="/produto-calculadora">
                 <Equal className="h-4 w-4" />
                 <span>Calculadora de Produtos</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Produtos">
-              <Link to="/products">
-                <BarChart2 className="h-4 w-4" />
-                <span>Produtos</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

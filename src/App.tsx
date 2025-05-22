@@ -8,7 +8,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Calculator from "./pages/Calculator";
 import NotFound from "./pages/NotFound";
 import ProductList from "./pages/ProductList";
 import ProductForm from "./pages/ProductForm";
@@ -35,15 +34,7 @@ const App = () => {
                 path="/" 
                 element={
                   <ProtectedRoute>
-                    <Calculator />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/calculator" 
-                element={
-                  <ProtectedRoute>
-                    <Calculator />
+                    <ProductList />
                   </ProtectedRoute>
                 } 
               />
