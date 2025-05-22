@@ -1,6 +1,6 @@
 
 import { ProductFormValues } from '@/types/product';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -27,6 +27,26 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
       
       <FormField
         control={form.control}
+        name="margemDeLucro"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Margem de Lucro (%)</FormLabel>
+            <FormControl>
+              <Input 
+                type="number" 
+                step="0.01" 
+                placeholder="0.00" 
+                {...field}
+                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      
+      <FormField
+        control={form.control}
         name="precoVenda"
         render={({ field }) => (
           <FormItem>
@@ -40,6 +60,9 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
                 onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
               />
             </FormControl>
+            <FormDescription>
+              Este valor será calculado posteriormente pelo sistema
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -60,26 +83,9 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
                 onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
               />
             </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      
-      <FormField
-        control={form.control}
-        name="margemDeLucro"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Margem de Lucro (%)</FormLabel>
-            <FormControl>
-              <Input 
-                type="number" 
-                step="0.01" 
-                placeholder="0.00" 
-                {...field}
-                onChange={(e) => field.onChange(parseFloat(e.target.value))}
-              />
-            </FormControl>
+            <FormDescription>
+              Este valor será calculado posteriormente pelo sistema
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

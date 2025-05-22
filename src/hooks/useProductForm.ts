@@ -11,9 +11,9 @@ import { useToast } from '@/hooks/use-toast';
 
 export const productSchema = z.object({
   nome: z.string().min(1, 'Nome é obrigatório'),
-  precoVenda: z.coerce.number().positive('Preço de venda deve ser maior que zero').optional(),
-  custoTotal: z.coerce.number().positive('Custo total deve ser maior que zero').optional(),
-  margemDeLucro: z.coerce.number().positive('Margem de lucro deve ser maior que zero'),
+  precoVenda: z.coerce.number().positive('Preço de venda deve ser maior que zero').optional().nullable(),
+  custoTotal: z.coerce.number().positive('Custo total deve ser maior que zero').optional().nullable(),
+  margemDeLucro: z.coerce.number().min(0, 'Margem de lucro não pode ser negativa').default(0),
 });
 
 export const useProductForm = () => {

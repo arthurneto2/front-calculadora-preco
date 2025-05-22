@@ -44,7 +44,7 @@ const ProductList = () => {
 
   // Helper function to safely format numbers
   const formatCurrency = (value?: number | null) => {
-    return value != null ? `R$ ${value.toFixed(2)}` : 'N/A';
+    return value != null ? `R$ ${value.toFixed(2)}` : 'Não calculado';
   };
 
   const formatPercentage = (value?: number | null) => {
@@ -88,7 +88,7 @@ const ProductList = () => {
     );
   }
   
-  // Changed the error state to show only the add product button
+  // If there are no products or there's an error, show a clean UI with just the "Add Product" button
   if (error || !products || products.length === 0) {
     return (
       <div className="container mx-auto p-4">
