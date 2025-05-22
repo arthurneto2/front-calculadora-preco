@@ -1,6 +1,6 @@
 
 import { ProductFormValues } from '@/types/product';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -20,6 +20,9 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
             <FormControl>
               <Input placeholder="Nome do produto" {...field} />
             </FormControl>
+            <FormDescription>
+              Digite o nome do seu produto.
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -40,6 +43,9 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
                 onChange={(e) => field.onChange(parseFloat(e.target.value))}
               />
             </FormControl>
+            <FormDescription>
+              Defina a margem de lucro desejada para este produto.
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

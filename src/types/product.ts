@@ -16,10 +16,9 @@ export interface ProductDto {
   componenteProdutoDtoSet?: ComponenteProdutoDto[];
 }
 
+// Atualizando para incluir apenas os campos que são realmente usados no formulário
 export type ProductFormValues = {
   nome: string;
-  precoVenda?: number;
-  custoTotal?: number;
   margemDeLucro: number;
 };
 

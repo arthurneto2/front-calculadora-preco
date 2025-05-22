@@ -9,10 +9,9 @@ import { createProduct, getProductById, updateProduct } from '@/services/product
 import { ProductDto, ProductFormValues } from '@/types/product';
 import { useToast } from '@/hooks/use-toast';
 
+// Ajustando o schema para tratar apenas os campos necessários para criação
 export const productSchema = z.object({
   nome: z.string().min(1, 'Nome é obrigatório'),
-  precoVenda: z.coerce.number().positive('Preço de venda deve ser maior que zero').optional().nullable(),
-  custoTotal: z.coerce.number().positive('Custo total deve ser maior que zero').optional().nullable(),
   margemDeLucro: z.coerce.number().min(0, 'Margem de lucro não pode ser negativa').default(0),
 });
 
@@ -27,8 +26,6 @@ export const useProductForm = () => {
     resolver: zodResolver(productSchema),
     defaultValues: {
       nome: '',
-      precoVenda: undefined,
-      custoTotal: undefined,
       margemDeLucro: 0,
     },
   });
@@ -44,8 +41,6 @@ export const useProductForm = () => {
     if (product) {
       form.reset({
         nome: product.nome,
-        precoVenda: product.precoVenda,
-        custoTotal: product.custoTotal,
         margemDeLucro: product.margemDeLucro,
       });
     }
@@ -53,7 +48,8 @@ export const useProductForm = () => {
 
   const createMutation = useMutation({
     mutationFn: createProduct,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Produto criado com sucesso:', data);
       toast({
         title: 'Produto criado',
         description: 'O produto foi criado com sucesso.',
@@ -61,7 +57,8 @@ export const useProductForm = () => {
       navigate('/products');
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Erro ao criar produto:', error);
       toast({
         title: 'Erro',
         description: 'Não foi possível criar o produto.',
@@ -80,7 +77,8 @@ export const useProductForm = () => {
       navigate('/products');
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Erro ao atualizar produto:', error);
       toast({
         title: 'Erro',
         description: 'Não foi possível atualizar o produto.',
@@ -90,19 +88,17 @@ export const useProductForm = () => {
   });
 
   const onSubmit = (data: ProductFormValues) => {
+    console.log('Formulário submetido com dados:', data);
     if (isEditing && product) {
       updateMutation.mutate({
         id: product.id,
         nome: data.nome,
-        precoVenda: data.precoVenda,
-        custoTotal: data.custoTotal,
         margemDeLucro: data.margemDeLucro,
       });
     } else {
+      // Enviando apenas os campos necessários
       createMutation.mutate({
         nome: data.nome,
-        precoVenda: data.precoVenda,
-        custoTotal: data.custoTotal,
         margemDeLucro: data.margemDeLucro,
       });
     }
