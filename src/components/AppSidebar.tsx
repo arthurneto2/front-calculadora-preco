@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { BarChart2, Package, Equal } from "lucide-react";
+import { BarChart2, Package } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Sidebar,
@@ -32,14 +32,6 @@ export function AppSidebar() {
               <Link to="/">
                 <BarChart2 className="h-4 w-4" />
                 <span>Produtos</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Calculadora de Produtos">
-              <Link to="/produto-calculadora">
-                <Equal className="h-4 w-4" />
-                <span>Calculadora de Produtos</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
