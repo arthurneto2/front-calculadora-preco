@@ -54,7 +54,7 @@ export const useProductForm = () => {
         title: 'Produto criado',
         description: 'O produto foi criado com sucesso.',
       });
-      // Fix redirect - use / instead of /products
+      // Redirect to root after creation
       navigate('/');
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
@@ -75,7 +75,7 @@ export const useProductForm = () => {
         title: 'Produto atualizado',
         description: 'O produto foi atualizado com sucesso.',
       });
-      // Fix redirect - use / instead of /products
+      // Redirect to root after update
       navigate('/');
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },

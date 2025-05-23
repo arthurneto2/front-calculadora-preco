@@ -141,7 +141,7 @@ const ProductDetail = () => {
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle>Informações Gerais</CardTitle>
-            <Link to={`/products/edit/${id}`}>
+            <Link to={`/produto/edit/${id}`}>
               <Button variant="outline" size="sm">
                 <Edit className="mr-2" size={16} />
                 Editar

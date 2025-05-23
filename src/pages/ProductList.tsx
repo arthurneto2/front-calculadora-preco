@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllProducts, deleteProduct } from '@/services/productService';
@@ -56,7 +55,7 @@ const ProductList = () => {
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Lista de Produtos</h1>
-          <Link to="/products/new">
+          <Link to="/produto/new">
             <Button>
               <Plus className="mr-2" size={16} />
               Novo Produto
@@ -94,7 +93,7 @@ const ProductList = () => {
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Lista de Produtos</h1>
-          <Link to="/products/new">
+          <Link to="/produto/new">
             <Button>
               <Plus className="mr-2" size={16} />
               Novo Produto
@@ -108,7 +107,7 @@ const ProductList = () => {
             Você ainda não possui produtos cadastrados. Comece criando seu primeiro produto.
           </p>
           <div className="mt-6">
-            <Link to="/products/new">
+            <Link to="/produto/new">
               <Button>
                 <Plus className="mr-2" size={16} />
                 Criar meu primeiro produto
@@ -124,7 +123,7 @@ const ProductList = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Lista de Produtos</h1>
-        <Link to="/products/new">
+        <Link to="/produto/new">
           <Button>
             <Plus className="mr-2" size={16} />
             Novo Produto
@@ -157,13 +156,13 @@ const ProductList = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between border-t pt-4">
-              <Link to={`/products/${product.id}`}>
+              <Link to={`/produto/${product.id}`}>
                 <Button variant="outline" size="sm">
                   Ver Detalhes
                 </Button>
               </Link>
               <div className="flex gap-2">
-                <Link to={`/products/edit/${product.id}`}>
+                <Link to={`/produto/edit/${product.id}`}>
                   <Button variant="outline" size="icon">
                     <Edit size={16} />
                   </Button>

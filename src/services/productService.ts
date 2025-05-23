@@ -33,41 +33,32 @@ export const updateProduct = async (product: ProductDto): Promise<ProductDto> =>
 
 // Função para deletar um produto
 export const deleteProduct = async (id: number): Promise<void> => {
-  // Endpoint correto: DELETE /produto?id={id} (corresponde ao @DeleteMapping com @RequestParam)
   await api.delete(`/produto?id=${id}`);
 };
 
 // Função para adicionar ingrediente ao produto
 export const adicionarIngrediente = async (idProduto: number, ingrediente: AdicionarIngredienteDto): Promise<void> => {
-  // Este endpoint não está definido no controlador fornecido
-  // Mantendo como está, assumindo que existe outro controlador/endpoint
   await api.post(`/produto/${idProduto}/ingredientes`, ingrediente);
 };
 
 // Função para calcular o preço do produto
 export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDto> => {
-  // Este endpoint não está definido no controlador fornecido
-  // Mantendo como está, assumindo que existe outro controlador/endpoint
   const response = await api.get<ProductDto>(`/produto/${idProduto}/calcular-preco`);
   return response.data;
 };
 
-// Função para adicionar insumos ao produto - CORRIGIDO
+// Função para adicionar insumos ao produto
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
-  // Endpoint corrigido: POST /produto/{id} (corresponde ao @PostMapping("/{id}") no controlador)
   await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
 };
 
-// Função para atualizar quantidade de um componente - CORRIGIDO
+// Função para atualizar quantidade de um componente
 export const updateQuantComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
-  // Endpoint corrigido: PUT /produto/{id} (corresponde ao @PutMapping("/{id}") no controlador)
   await api.put(`/produto/${idProduto}`, componente);
 };
 
-// Função para deletar um componente - CORRIGIDO
+// Função para deletar um componente
 export const deleteComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
-  // Endpoint corrigido: DELETE /produto/{id} com corpo da requisição
-  // (corresponde ao @DeleteMapping("/{id}") com @PathVariable e @RequestBody no controlador)
   await api.delete(`/produto/${idProduto}`, { data: componente });
 };
 
@@ -89,8 +80,6 @@ export interface ProductCalculationResponse {
 }
 
 export const calculateProductPrice = async (data: ProductCalculationRequest): Promise<ProductCalculationResponse> => {
-  // Este endpoint não está definido no controlador fornecido
-  // Mantendo como está, assumindo que existe outro controlador/endpoint
   const response = await api.post<ProductCalculationResponse>('/produto/calculate', data);
   return response.data;
 };
