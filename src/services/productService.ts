@@ -61,8 +61,11 @@ export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: Ad
     }
 
     console.log(`Adicionando insumo ao produto ${idProduto}:`, adicionarInsumoDto);
-    // Corrigindo o endpoint - o backend espera que seja usado /produto/{id}
+    
+    // Corrigindo o endpoint para corresponder exatamente ao backend
+    // O caminho deve ser /produto/{id} conforme o controlador Java mostrado
     const response = await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
+    
     console.log('Resposta do servidor:', response.data);
   } catch (error) {
     console.error(`Erro ao adicionar insumo ao produto ${idProduto}:`, error);

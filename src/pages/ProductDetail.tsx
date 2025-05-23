@@ -1,22 +1,36 @@
-
-import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getProductById, adicionarInsumos, updateQuantComponente, deleteComponente } from '@/services/productService';
 import { getAllInsumos } from '@/services/insumoService';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Edit, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ComponenteProdutoDto, AdicionarIngredienteDto } from '@/types/product';
 import { ComponenteCard } from '@/components/product/ComponenteCard';
 import { AdicionarComponenteDialog } from '@/components/product/AdicionarComponenteDialog';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  
+  // Verificar autenticação
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast({
+        title: 'Não autenticado',
+        description: 'Você precisa estar logado para acessar esta página.',
+        variant: 'destructive',
+      });
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate, toast]);
   
   const { data: product, isLoading: isLoadingProduct } = useQuery({
     queryKey: ['product', id],
@@ -29,7 +43,10 @@ const ProductDetail = () => {
   });
 
   const adicionarComponenteMutation = useMutation({
-    mutationFn: (data: AdicionarIngredienteDto) => adicionarInsumos(Number(id), data),
+    mutationFn: (data: AdicionarIngredienteDto) => {
+      console.log("Enviando para adicionar componente:", data);
+      return adicionarInsumos(Number(id), data);
+    },
     onSuccess: () => {
       toast({
         title: 'Componente adicionado',
@@ -38,12 +55,21 @@ const ProductDetail = () => {
       queryClient.invalidateQueries({ queryKey: ['product', id] });
       setIsDialogOpen(false);
     },
-    onError: () => {
-      toast({
-        title: 'Erro',
-        description: 'Não foi possível adicionar o componente.',
-        variant: 'destructive',
-      });
+    onError: (error: any) => {
+      console.error("Erro detalhado:", error);
+      if (error?.response?.status === 401) {
+        toast({
+          title: 'Sessão expirada',
+          description: 'Sua sessão expirou. Por favor, faça login novamente.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Não foi possível adicionar o componente. Verifique o console para mais detalhes.',
+          variant: 'destructive',
+        });
+      }
     },
   });
 
@@ -92,6 +118,17 @@ const ProductDetail = () => {
   };
 
   const handleAdicionarComponente = (data: AdicionarIngredienteDto) => {
+    // Verificar se o usuário está autenticado antes de adicionar
+    if (!isAuthenticated) {
+      toast({
+        title: 'Não autenticado',
+        description: 'Você precisa estar logado para adicionar componentes.',
+        variant: 'destructive',
+      });
+      navigate('/login');
+      return;
+    }
+    
     adicionarComponenteMutation.mutate(data);
   };
 

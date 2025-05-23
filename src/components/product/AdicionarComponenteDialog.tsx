@@ -40,9 +40,10 @@ export function AdicionarComponenteDialog({
       return;
     }
     
+    // Garantindo que o objeto enviado tem o formato esperado pelo backend
     onSubmit({
-      insumoId: Number(insumoId),
-      quantidade
+      insumoId: Number(insumoId),  // Garantindo que é um number conforme esperado pelo Java
+      quantidade                   // BigDecimal no Java, number no TypeScript
     });
     
     // Reset form
