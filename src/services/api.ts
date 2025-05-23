@@ -21,14 +21,19 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Verificar se é um erro de token expirado
     if (error.response && error.response.status === 401) {
-      // Se receber um 401, significa que o token está inválido ou expirou
       console.log('Token expirado ou inválido. Redirecionando para login...');
+      
+      // Limpar token e dados do usuário
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       
-      // Redirecionar para a página de login
-      window.location.href = '/login';
+      // Adicionar um pequeno delay para dar tempo à requisição atual terminar
+      // antes de redirecionar, evitando loops de redirecionamento
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 100);
     }
     return Promise.reject(error);
   }

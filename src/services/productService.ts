@@ -1,4 +1,3 @@
-
 import api from './api';
 import { ProductDto, AdicionarIngredienteDto, ComponenteProdutoDto } from '@/types/product';
 
@@ -53,7 +52,20 @@ export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDt
 
 // Função para adicionar insumos ao produto
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
-  await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
+  try {
+    // Verificar token antes de fazer a requisição
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token não encontrado');
+    }
+
+    console.log(`Adicionando insumo ao produto ${idProduto}:`, adicionarInsumoDto);
+    const response = await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
+    console.log('Resposta do servidor:', response.data);
+  } catch (error) {
+    console.error(`Erro ao adicionar insumo ao produto ${idProduto}:`, error);
+    throw error;
+  }
 };
 
 // Função para atualizar quantidade de um componente
