@@ -7,9 +7,14 @@ export const createProduct = async (product: ProductDto): Promise<ProductDto> =>
   // Verificando os dados enviados ao backend
   console.log('Dados enviados para criação:', product);
   
-  const response = await api.post<ProductDto>('/produto', product);
-  console.log('Resposta do servidor:', response.data);
-  return response.data;
+  try {
+    const response = await api.post<ProductDto>('/produto', product);
+    console.log('Resposta do servidor:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar produto:', error);
+    throw error;
+  }
 };
 
 // Função para listar todos os produtos
