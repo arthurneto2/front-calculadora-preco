@@ -1,4 +1,3 @@
-
 import api from './api';
 import { InsumoDto } from '@/types/insumo';
 
