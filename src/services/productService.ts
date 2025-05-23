@@ -1,4 +1,3 @@
-
 import api from './api';
 import { ProductDto, AdicionarIngredienteDto, ComponenteProdutoDto } from '@/types/product';
 
@@ -54,16 +53,10 @@ export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDt
 // Função para adicionar insumos ao produto
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
   try {
-    // Verificar token antes de fazer a requisição
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('Token não encontrado');
-    }
-
     console.log(`Adicionando insumo ao produto ${idProduto}:`, adicionarInsumoDto);
     
-    // Corrigindo o endpoint para corresponder exatamente ao backend
-    // O caminho deve ser /produto/{id} conforme o controlador Java mostrado
+    // Usando o endpoint correto conforme o controlador Java
+    // @PostMapping("/{id}")
     const response = await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
     
     console.log('Resposta do servidor:', response.data);

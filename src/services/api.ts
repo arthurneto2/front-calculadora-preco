@@ -8,7 +8,7 @@ const api = axios.create({
   },
 });
 
-// Add interceptor to include auth token in requests
+// Interceptor para incluir o token de autenticação nas requisições
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -17,26 +17,30 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Add response interceptor to handle authentication errors
+// Interceptor para tratar respostas e erros de autenticação
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Verificar se é um erro de token expirado
+    // Se o erro for 401 (Não autorizado) e não estivermos na página de login
     if (error.response && error.response.status === 401) {
-      console.log('Token expirado ou inválido. Redirecionando para login...');
+      console.log('Token expirado ou inválido:', error);
       
-      // Limpar token e dados do usuário
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      
-      // Para evitar loops de redirecionamento, verificamos se já estamos na página de login
+      // Não redirecionar se já estivermos tentando fazer login
       if (!window.location.pathname.includes('/login')) {
-        // Usar setTimeout para dar tempo de finalizar a requisição atual
+        console.log('Redirecionando para login...');
+        
+        // Damos tempo para finalizar qualquer requisição atual antes de redirecionar
         setTimeout(() => {
+          // Limpar dados de autenticação
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          
+          // Redirecionar para login
           window.location.href = '/login';
         }, 100);
       }
     }
+    
     return Promise.reject(error);
   }
 );
