@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,8 +37,8 @@ export const useInsumoForm = () => {
     enabled: isEditing,
   });
 
-  // Use useState to handle form value updates when insumo data is loaded
-  useState(() => {
+  // Use useEffect instead of useState to set form values when insumo data is loaded
+  useEffect(() => {
     if (insumo) {
       form.reset({
         nome: insumo.nome,
@@ -46,7 +46,7 @@ export const useInsumoForm = () => {
         custoUn: insumo.custoUn,
       });
     }
-  });
+  }, [insumo, form]);
 
   const createMutation = useMutation({
     mutationFn: createInsumo,
@@ -55,6 +55,7 @@ export const useInsumoForm = () => {
         title: 'Insumo criado',
         description: 'O insumo foi criado com sucesso.',
       });
+      // Ensure correct navigation path
       navigate('/insumo');
       queryClient.invalidateQueries({ queryKey: ['insumos'] });
     },
@@ -74,6 +75,7 @@ export const useInsumoForm = () => {
         title: 'Insumo atualizado',
         description: 'O insumo foi atualizado com sucesso.',
       });
+      // Ensure correct navigation path
       navigate('/insumo');
       queryClient.invalidateQueries({ queryKey: ['insumos'] });
     },
