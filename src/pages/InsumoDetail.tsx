@@ -44,7 +44,7 @@ const InsumoDetail = () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Detalhes do Insumo</CardTitle>
-              <Link to={`/insumos/edit/${id}`}>
+              <Link to={`/insumo/editar/${id}`}>
                 <Button variant="outline" size="sm">
                   <Edit className="mr-2" size={16} />
                   Editar
@@ -73,7 +73,7 @@ const InsumoDetail = () => {
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Link to="/insumos">
+            <Link to="/insumo">
               <Button variant="outline">
                 Voltar para lista
               </Button>

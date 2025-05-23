@@ -62,7 +62,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/insumos" 
+                path="/insumo" 
                 element={
                   <ProtectedRoute>
                     <InsumoList />
@@ -70,7 +70,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/insumos/novo" 
+                path="/insumo/novo" 
                 element={
                   <ProtectedRoute>
                     <InsumoForm />
@@ -78,7 +78,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/insumos/editar/:id" 
+                path="/insumo/editar/:id" 
                 element={
                   <ProtectedRoute>
                     <InsumoForm />
@@ -86,7 +86,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/insumos/:id" 
+                path="/insumo/:id" 
                 element={
                   <ProtectedRoute>
                     <InsumoDetail />

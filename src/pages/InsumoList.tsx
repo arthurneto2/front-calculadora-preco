@@ -8,6 +8,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import Navbar from '@/components/Navbar';
 
 const InsumoList = () => {
   const { toast } = useToast();
@@ -54,7 +55,7 @@ const InsumoList = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Lista de Insumos</h1>
-        <Link to="/insumos/new">
+        <Link to="/insumo/novo">
           <Button>
             <Plus className="mr-2" size={16} />
             Novo Insumo
@@ -82,7 +83,7 @@ const InsumoList = () => {
                 <TableCell>R$ {insumo.custoUn.toFixed(2)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Link to={`/insumos/edit/${insumo.id}`}>
+                    <Link to={`/insumo/editar/${insumo.id}`}>
                       <Button variant="outline" size="icon">
                         <Edit size={16} />
                       </Button>
@@ -103,7 +104,7 @@ const InsumoList = () => {
       ) : (
         <div className="text-center p-8 bg-gray-50 rounded-lg">
           <p className="text-gray-500">Nenhum insumo encontrado</p>
-          <Link to="/insumos/new" className="mt-4 inline-block">
+          <Link to="/insumo/novo" className="mt-4 inline-block">
             <Button>
               <Plus className="mr-2" size={16} />
               Adicionar primeiro insumo

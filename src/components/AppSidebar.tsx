@@ -37,7 +37,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Insumos">
-              <Link to="/insumos">
+              <Link to="/insumo">
                 <Package className="h-4 w-4" />
                 <span>Insumos</span>
               </Link>
