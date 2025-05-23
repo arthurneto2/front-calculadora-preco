@@ -5,12 +5,6 @@ import { AuthorizationDTO, LoginRequestDto, UserRegisterRequestDto } from '@/typ
 export const login = async (credentials: LoginRequestDto): Promise<AuthorizationDTO> => {
   try {
     const response = await api.post<AuthorizationDTO>('/auth/login', credentials);
-    
-    // Verificar se o token foi retornado corretamente
-    if (!response.data || !response.data.tokenJwt) {
-      throw new Error('Token não recebido do servidor');
-    }
-    
     return response.data;
   } catch (error) {
     console.error('Erro durante o login:', error);
@@ -23,13 +17,8 @@ export const register = async (userData: UserRegisterRequestDto): Promise<any> =
   return response.data;
 };
 
-// Função para verificar se o token atual é válido
+// Função simplificada apenas para verificar se o token existe
 export const checkToken = async (): Promise<boolean> => {
-  try {
-    // Fazer uma requisição simples que requer autenticação
-    await api.get('/auth/check');
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const token = localStorage.getItem('token');
+  return !!token;
 };

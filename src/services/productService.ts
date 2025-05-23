@@ -50,16 +50,13 @@ export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDt
   return response.data;
 };
 
-// Função para adicionar insumos ao produto
+// Função para adicionar insumos ao produto - simplificada para focar apenas na chamada da API
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
   try {
     console.log(`Adicionando insumo ao produto ${idProduto}:`, adicionarInsumoDto);
     
-    // Usando o endpoint correto conforme o controlador Java
-    // @PostMapping("/{id}")
-    const response = await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
-    
-    console.log('Resposta do servidor:', response.data);
+    // Usando o endpoint conforme o controlador Java
+    await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
   } catch (error) {
     console.error(`Erro ao adicionar insumo ao produto ${idProduto}:`, error);
     throw error;

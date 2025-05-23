@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -21,7 +20,7 @@ const ProductDetail = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   
-  // Verificar autenticação
+  // Verificar autenticação apenas uma vez ao carregar
   useEffect(() => {
     if (!isAuthenticated) {
       toast({
@@ -57,28 +56,19 @@ const ProductDetail = () => {
       setIsDialogOpen(false);
     },
     onError: (error: any) => {
-      console.error("Erro detalhado:", error);
+      console.error("Erro ao adicionar componente:", error);
       
-      // Verifica se é um erro de autenticação
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível adicionar o componente. Por favor, verifique se está logado.',
+        variant: 'destructive',
+      });
+      
+      // Se for erro de autenticação, redireciona para login
       if (error?.response?.status === 401) {
-        // Se o erro for 401 (não autorizado), redireciona para login
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        
-        toast({
-          title: 'Sessão expirada',
-          description: 'Sua sessão expirou. Por favor, faça login novamente.',
-          variant: 'destructive',
-        });
-        
         navigate('/login');
-      } else {
-        // Para outros erros, mostra mensagem genérica
-        toast({
-          title: 'Erro',
-          description: 'Não foi possível adicionar o componente. Verifique o console para mais detalhes.',
-          variant: 'destructive',
-        });
       }
     },
   });
@@ -128,19 +118,6 @@ const ProductDetail = () => {
   };
 
   const handleAdicionarComponente = (data: AdicionarIngredienteDto) => {
-    // Verificar se há token antes de tentar adicionar
-    const token = localStorage.getItem('token');
-    if (!token) {
-      toast({
-        title: 'Não autenticado',
-        description: 'Você precisa estar logado para adicionar componentes.',
-        variant: 'destructive',
-      });
-      navigate('/login');
-      return;
-    }
-    
-    console.log('Token encontrado, prosseguindo com a adição do componente');
     adicionarComponenteMutation.mutate(data);
   };
 

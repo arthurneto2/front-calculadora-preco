@@ -17,28 +17,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Interceptor para tratar respostas e erros de autenticação
+// Simplificando o interceptor de resposta para apenas rejeitar os erros sem redirecionamento automático
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Se o erro for 401 (Não autorizado) e não estivermos na página de login
+    // Apenas loga o erro e o rejeita
     if (error.response && error.response.status === 401) {
       console.log('Token expirado ou inválido:', error);
-      
-      // Não redirecionar se já estivermos tentando fazer login
-      if (!window.location.pathname.includes('/login')) {
-        console.log('Redirecionando para login...');
-        
-        // Damos tempo para finalizar qualquer requisição atual antes de redirecionar
-        setTimeout(() => {
-          // Limpar dados de autenticação
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          
-          // Redirecionar para login
-          window.location.href = '/login';
-        }, 100);
-      }
+      // Não redirecionamos mais automaticamente
     }
     
     return Promise.reject(error);
