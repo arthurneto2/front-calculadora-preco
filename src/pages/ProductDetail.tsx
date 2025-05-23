@@ -1,31 +1,120 @@
 
+import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getProductById } from '@/services/productService';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getProductById, adicionarInsumos, updateQuantComponente, deleteComponente } from '@/services/productService';
+import { getAllInsumos } from '@/services/insumoService';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Edit } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
+import { Edit, Trash2, Plus, ArrowLeft } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { ComponenteProdutoDto, AdicionarIngredienteDto } from '@/types/product';
+import { ComponenteCard } from '@/components/product/ComponenteCard';
+import { AdicionarComponenteDialog } from '@/components/product/AdicionarComponenteDialog';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
-  const { data: product, isLoading, error } = useQuery({
+  const { data: product, isLoading: isLoadingProduct } = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProductById(Number(id)),
   });
-
-  if (isLoading) return <div className="flex justify-center p-8">Carregando detalhes do produto...</div>;
   
-  if (error) return <div className="text-red-500 p-4">Erro ao carregar detalhes do produto</div>;
+  const { data: insumos, isLoading: isLoadingInsumos } = useQuery({
+    queryKey: ['insumos'],
+    queryFn: getAllInsumos,
+  });
+
+  const adicionarComponenteMutation = useMutation({
+    mutationFn: (data: AdicionarIngredienteDto) => adicionarInsumos(Number(id), data),
+    onSuccess: () => {
+      toast({
+        title: 'Componente adicionado',
+        description: 'O componente foi adicionado com sucesso.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['product', id] });
+      setIsDialogOpen(false);
+    },
+    onError: () => {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível adicionar o componente.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const updateComponenteMutation = useMutation({
+    mutationFn: (componente: ComponenteProdutoDto) => updateQuantComponente(Number(id), componente),
+    onSuccess: () => {
+      toast({
+        title: 'Componente atualizado',
+        description: 'A quantidade foi atualizada com sucesso.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['product', id] });
+    },
+    onError: () => {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível atualizar o componente.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const deleteComponenteMutation = useMutation({
+    mutationFn: (componente: ComponenteProdutoDto) => deleteComponente(Number(id), componente),
+    onSuccess: () => {
+      toast({
+        title: 'Componente removido',
+        description: 'O componente foi removido com sucesso.',
+      });
+      queryClient.invalidateQueries({ queryKey: ['product', id] });
+    },
+    onError: () => {
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível remover o componente.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleUpdateQuantidade = (componente: ComponenteProdutoDto, novaQuantidade: number) => {
+    updateComponenteMutation.mutate({ ...componente, quantidade: novaQuantidade });
+  };
+
+  const handleDeleteComponente = (componente: ComponenteProdutoDto) => {
+    deleteComponenteMutation.mutate(componente);
+  };
+
+  const handleAdicionarComponente = (data: AdicionarIngredienteDto) => {
+    adicionarComponenteMutation.mutate(data);
+  };
+
+  if (isLoadingProduct) return <div className="flex justify-center p-8">Carregando detalhes do produto...</div>;
   
   if (!product) return <div className="text-red-500 p-4">Produto não encontrado</div>;
 
   return (
     <div className="container mx-auto p-4">
-      <Card className="max-w-2xl mx-auto">
+      <div className="flex items-center mb-6">
+        <Link to="/">
+          <Button variant="outline" size="sm" className="mr-4">
+            <ArrowLeft className="mr-2" size={16} />
+            Voltar
+          </Button>
+        </Link>
+        <h1 className="text-2xl font-bold">Detalhes do Produto: {product.nome}</h1>
+      </div>
+
+      <Card className="mb-8">
         <CardHeader>
           <div className="flex justify-between items-center">
-            <CardTitle>Detalhes do Produto</CardTitle>
+            <CardTitle>Informações Gerais</CardTitle>
             <Link to={`/products/edit/${id}`}>
               <Button variant="outline" size="sm">
                 <Edit className="mr-2" size={16} />
@@ -35,7 +124,7 @@ const ProductDetail = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <h3 className="text-sm font-medium text-gray-500">ID</h3>
               <p className="mt-1">{product.id}</p>
@@ -45,27 +134,62 @@ const ProductDetail = () => {
               <p className="mt-1">{product.nome}</p>
             </div>
             <div>
+              <h3 className="text-sm font-medium text-gray-500">Margem de Lucro</h3>
+              <p className="mt-1">{product.margemDeLucro?.toFixed(2)}%</p>
+            </div>
+            <div>
               <h3 className="text-sm font-medium text-gray-500">Preço de Venda</h3>
-              <p className="mt-1">R$ {product.precoVenda.toFixed(2)}</p>
+              <p className="mt-1">R$ {product.precoVenda?.toFixed(2) || '0.00'}</p>
             </div>
             <div>
               <h3 className="text-sm font-medium text-gray-500">Custo Total</h3>
-              <p className="mt-1">R$ {product.custoTotal.toFixed(2)}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Margem de Lucro</h3>
-              <p className="mt-1">{product.margemDeLucro.toFixed(2)}%</p>
+              <p className="mt-1">R$ {product.custoTotal?.toFixed(2) || '0.00'}</p>
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <Link to="/products">
-            <Button variant="outline">
-              Voltar para lista
-            </Button>
-          </Link>
-        </CardFooter>
       </Card>
+      
+      <div className="mb-6 flex justify-between items-center">
+        <h2 className="text-xl font-bold">Componentes do Produto</h2>
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <Plus className="mr-2" size={16} />
+          Adicionar Componente
+        </Button>
+      </div>
+
+      {product.componenteProdutoDtoSet && product.componenteProdutoDtoSet.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {product.componenteProdutoDtoSet.map((componente) => (
+            <ComponenteCard 
+              key={componente.id || `${componente.insumoId}-${Date.now()}`}
+              componente={componente}
+              insumos={insumos || []}
+              onUpdateQuantidade={handleUpdateQuantidade}
+              onDelete={handleDeleteComponente}
+              isUpdating={updateComponenteMutation.isPending}
+              isDeleting={deleteComponenteMutation.isPending}
+            />
+          ))}
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center p-8">
+            <p className="text-gray-500 mb-4">Nenhum componente adicionado a este produto</p>
+            <Button onClick={() => setIsDialogOpen(true)}>
+              <Plus className="mr-2" size={16} />
+              Adicionar Primeiro Componente
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      <AdicionarComponenteDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        insumos={insumos || []}
+        onSubmit={handleAdicionarComponente}
+        isSubmitting={adicionarComponenteMutation.isPending}
+      />
     </div>
   );
 };
