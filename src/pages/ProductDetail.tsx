@@ -42,17 +42,24 @@ const ProductDetail = () => {
     queryFn: getAllInsumos,
   });
 
-  // Nova query para buscar componentes específicos
+  // Query para buscar componentes usando o novo endpoint
   const { data: componentes, isLoading: isLoadingComponentes } = useQuery({
     queryKey: ['product-components', id],
     queryFn: () => getProductComponents(Number(id)),
     enabled: !!id,
   });
 
-  // Debug: log para verificar os dados carregados
+  // Debug detalhado para verificar os dados carregados
+  console.log('=== ProductDetail Debug ===');
+  console.log('Product ID:', id);
   console.log('Product loaded:', product);
   console.log('Insumos loaded:', insumos);
-  console.log('Componentes loaded:', componentes);
+  console.log('Componentes from new endpoint:', componentes);
+  console.log('Is loading states:', {
+    product: isLoadingProduct,
+    insumos: isLoadingInsumos,
+    componentes: isLoadingComponentes
+  });
 
   const adicionarComponenteMutation = useMutation({
     mutationFn: (data: AdicionarIngredienteDto) => {
@@ -200,17 +207,20 @@ const ProductDetail = () => {
 
       {componentes && componentes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {componentes.map((componente) => (
-            <ComponenteCard 
-              key={componente.id || `${componente.insumoId}-${Date.now()}`}
-              componente={componente}
-              insumos={insumos || []}
-              onUpdateQuantidade={handleUpdateQuantidade}
-              onDelete={handleDeleteComponente}
-              isUpdating={updateComponenteMutation.isPending}
-              isDeleting={deleteComponenteMutation.isPending}
-            />
-          ))}
+          {componentes.map((componente) => {
+            console.log('Renderizando componente:', componente);
+            return (
+              <ComponenteCard 
+                key={componente.id || `${componente.insumoId}-${Date.now()}`}
+                componente={componente}
+                insumos={insumos || []}
+                onUpdateQuantidade={handleUpdateQuantidade}
+                onDelete={handleDeleteComponente}
+                isUpdating={updateComponenteMutation.isPending}
+                isDeleting={deleteComponenteMutation.isPending}
+              />
+            );
+          })}
         </div>
       ) : (
         <Card>

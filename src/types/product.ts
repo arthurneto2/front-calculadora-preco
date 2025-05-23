@@ -5,6 +5,13 @@ export interface ComponenteProdutoDto {
   quantidade: number;
   insumoNome?: string;
   insumoCustoUn?: number;
+  // Adicionando campos que podem vir do backend
+  insumo?: {
+    id: number;
+    nome: string;
+    custoUn: number;
+    unMedida: string;
+  };
 }
 
 export interface ProductDto {

@@ -27,19 +27,37 @@ export function ComponenteCard({
   const [isEditing, setIsEditing] = useState(false);
   const [quantidade, setQuantidade] = useState(componente.quantidade);
   
-  // Debug: log para verificar os dados
-  console.log('Componente:', componente);
-  console.log('Insumos disponíveis:', insumos);
-  console.log('Procurando insumo com ID:', componente.insumoId);
+  // Debug detalhado para verificar os dados
+  console.log('=== ComponenteCard Debug ===');
+  console.log('Componente completo:', JSON.stringify(componente, null, 2));
+  console.log('InsumoId do componente:', componente.insumoId);
+  console.log('Lista de insumos disponíveis:', insumos?.map(i => ({ id: i.id, nome: i.nome })));
   
-  // Encontra o insumo correspondente
-  const insumo = insumos.find(i => i.id === componente.insumoId);
-  console.log('Insumo encontrado:', insumo);
+  // Encontra o insumo correspondente na lista de insumos
+  const insumoFromList = insumos?.find(i => i.id === componente.insumoId);
+  console.log('Insumo da lista encontrado:', insumoFromList);
   
-  // Prioriza os dados que vêm do componente, senão busca do insumo
-  const insumoNome = componente.insumoNome || insumo?.nome || `Insumo ID: ${componente.insumoId}`;
-  const insumoCustoUn = componente.insumoCustoUn ?? insumo?.custoUn ?? 0;
-  const unidadeMedida = insumo?.unMedida || 'un';
+  // Prioridade: dados do componente > dados aninhados do insumo > insumo da lista > fallback
+  const insumoNome = componente.insumoNome || 
+                     componente.insumo?.nome || 
+                     insumoFromList?.nome || 
+                     `Insumo não encontrado (ID: ${componente.insumoId})`;
+                     
+  const insumoCustoUn = componente.insumoCustoUn ?? 
+                        componente.insumo?.custoUn ?? 
+                        insumoFromList?.custoUn ?? 
+                        0;
+                        
+  const unidadeMedida = componente.insumo?.unMedida || 
+                        insumoFromList?.unMedida || 
+                        'un';
+  
+  console.log('Dados finais para exibição:', {
+    nome: insumoNome,
+    custoUn: insumoCustoUn,
+    unidade: unidadeMedida,
+    quantidade: componente.quantidade
+  });
   
   // Calcula o custo total
   const custoTotal = insumoCustoUn * componente.quantidade;
