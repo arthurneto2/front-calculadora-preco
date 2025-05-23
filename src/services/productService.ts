@@ -36,9 +36,7 @@ export const updateProduct = async (product: ProductDto): Promise<ProductDto> =>
 
 // Função para deletar um produto
 export const deleteProduct = async (id: number): Promise<void> => {
-  // CORREÇÃO NECESSÁRIA: O controlador Java não especifica o parâmetro no caminho
-  // O método no controlador recebe como parâmetro regular, não como @PathVariable
-  // Deveria ser passado como query parameter: /produto?id={id}
+  // Endpoint correto: DELETE /produto?id={id} (corresponde ao @DeleteMapping com @RequestParam)
   await api.delete(`/produto?id=${id}`);
 };
 
@@ -57,25 +55,23 @@ export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDt
   return response.data;
 };
 
-// Função para adicionar insumos ao produto
+// Função para adicionar insumos ao produto - CORRIGIDO
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
-  // Este endpoint não está definido no controlador fornecido
-  // Mantendo como está, assumindo que existe outro controlador/endpoint
+  // Endpoint corrigido: POST /produto/{id} (corresponde ao @PostMapping("/{id}") no controlador)
   await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
 };
 
-// Função para atualizar quantidade de um componente
+// Função para atualizar quantidade de um componente - CORRIGIDO
 export const updateQuantComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
-  // Este endpoint não está definido no controlador fornecido
-  // Mantendo como está, assumindo que existe outro controlador/endpoint
-  await api.put(`/produto/${idProduto}/componente`, componente);
+  // Endpoint corrigido: PUT /produto/{id} (corresponde ao @PutMapping("/{id}") no controlador)
+  await api.put(`/produto/${idProduto}`, componente);
 };
 
-// Função para deletar um componente
+// Função para deletar um componente - CORRIGIDO
 export const deleteComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
-  // Este endpoint não está definido no controlador fornecido
-  // Mantendo como está, assumindo que existe outro controlador/endpoint
-  await api.delete(`/produto/${idProduto}/componente`, { data: componente });
+  // Endpoint corrigido: DELETE /produto/{id} com corpo da requisição
+  // (corresponde ao @DeleteMapping("/{id}") com @PathVariable e @RequestBody no controlador)
+  await api.delete(`/produto/${idProduto}`, { data: componente });
 };
 
 // Interfaces e função para cálculo de preço
