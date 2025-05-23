@@ -15,21 +15,18 @@ export const createProduct = async (product: ProductDto): Promise<ProductDto> =>
 
 // Função para listar todos os produtos
 export const getAllProducts = async (): Promise<ProductDto[]> => {
-  // Endpoint correto: GET /produto (corresponde ao @GetMapping sem path no controlador)
   const response = await api.get<ProductDto[]>('/produto');
   return response.data;
 };
 
 // Função para buscar um produto por id
 export const getProductById = async (id: number): Promise<ProductDto> => {
-  // Endpoint correto: GET /produto/{id} (corresponde ao @GetMapping("{id}") no controlador)
   const response = await api.get<ProductDto>(`/produto/${id}`);
   return response.data;
 };
 
 // Função para atualizar um produto
 export const updateProduct = async (product: ProductDto): Promise<ProductDto> => {
-  // Endpoint correto: PUT /produto (corresponde ao @PutMapping sem path no controlador)
   const response = await api.put<ProductDto>('/produto', product);
   return response.data;
 };
