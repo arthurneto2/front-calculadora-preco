@@ -55,7 +55,6 @@ export const useInsumoForm = () => {
         title: 'Insumo criado',
         description: 'O insumo foi criado com sucesso.',
       });
-      // Ensure correct navigation path
       navigate('/insumo');
       queryClient.invalidateQueries({ queryKey: ['insumos'] });
     },
@@ -75,7 +74,6 @@ export const useInsumoForm = () => {
         title: 'Insumo atualizado',
         description: 'O insumo foi atualizado com sucesso.',
       });
-      // Ensure correct navigation path
       navigate('/insumo');
       queryClient.invalidateQueries({ queryKey: ['insumos'] });
     },
