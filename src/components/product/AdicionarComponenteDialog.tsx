@@ -40,15 +40,10 @@ export function AdicionarComponenteDialog({
       return;
     }
     
-    console.log('Enviando dados do componente:', {
+    // Enviando diretamente sem logs extras
+    onSubmit({
       insumoId: Number(insumoId),
       quantidade
-    });
-    
-    // Garantindo que o objeto enviado tem o formato esperado pelo backend
-    onSubmit({
-      insumoId: Number(insumoId),  // Garantindo que é um number conforme esperado pelo Java
-      quantidade                   // BigDecimal no Java, number no TypeScript
     });
     
     // Reset form

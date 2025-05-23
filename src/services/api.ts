@@ -8,7 +8,7 @@ const api = axios.create({
   },
 });
 
-// Interceptor para incluir o token de autenticação nas requisições
+// Interceptor simplificado para incluir o token de autenticação nas requisições
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -17,16 +17,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Simplificando o interceptor de resposta para apenas rejeitar os erros sem redirecionamento automático
+// Interceptor de resposta muito simplificado apenas para capturar erros
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Apenas loga o erro e o rejeita
-    if (error.response && error.response.status === 401) {
-      console.log('Token expirado ou inválido:', error);
-      // Não redirecionamos mais automaticamente
-    }
-    
     return Promise.reject(error);
   }
 );

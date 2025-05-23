@@ -1,14 +1,11 @@
+
 import api from './api';
 import { ProductDto, AdicionarIngredienteDto, ComponenteProdutoDto } from '@/types/product';
 
 // Função para criar um produto
 export const createProduct = async (product: ProductDto): Promise<ProductDto> => {
-  // Verificando os dados enviados ao backend
-  console.log('Dados enviados para criação:', product);
-  
   try {
     const response = await api.post<ProductDto>('/produto', product);
-    console.log('Resposta do servidor:', response.data);
     return response.data;
   } catch (error) {
     console.error('Erro ao criar produto:', error);
@@ -50,17 +47,10 @@ export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDt
   return response.data;
 };
 
-// Função para adicionar insumos ao produto - simplificada para focar apenas na chamada da API
+// Função para adicionar insumos ao produto - simplificada para usar o endpoint correto
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
-  try {
-    console.log(`Adicionando insumo ao produto ${idProduto}:`, adicionarInsumoDto);
-    
-    // Usando o endpoint conforme o controlador Java
-    await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
-  } catch (error) {
-    console.error(`Erro ao adicionar insumo ao produto ${idProduto}:`, error);
-    throw error;
-  }
+  // Enviando diretamente ao endpoint conforme definido no controlador Java
+  await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
 };
 
 // Função para atualizar quantidade de um componente
