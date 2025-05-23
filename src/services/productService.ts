@@ -1,4 +1,3 @@
-
 import api from './api';
 import { ProductDto, AdicionarIngredienteDto, ComponenteProdutoDto } from '@/types/product';
 
@@ -60,6 +59,12 @@ export const updateQuantComponente = async (idProduto: number, componente: Compo
 // Função para deletar um componente
 export const deleteComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
   await api.delete(`/produto/${idProduto}/componente`, { data: componente });
+};
+
+// Nova função para listar componentes do produto
+export const getProductComponents = async (idProduto: number): Promise<ComponenteProdutoDto[]> => {
+  const response = await api.get<ComponenteProdutoDto[]>(`/produto/${idProduto}/list-all/componente`);
+  return response.data;
 };
 
 // Interfaces e função para cálculo de preço

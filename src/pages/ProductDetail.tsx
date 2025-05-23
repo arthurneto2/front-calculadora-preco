@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getProductById, adicionarInsumos, updateQuantComponente, deleteComponente } from '@/services/productService';
+import { getProductById, adicionarInsumos, updateQuantComponente, deleteComponente, getProductComponents } from '@/services/productService';
 import { getAllInsumos } from '@/services/insumoService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,9 +42,17 @@ const ProductDetail = () => {
     queryFn: getAllInsumos,
   });
 
+  // Nova query para buscar componentes específicos
+  const { data: componentes, isLoading: isLoadingComponentes } = useQuery({
+    queryKey: ['product-components', id],
+    queryFn: () => getProductComponents(Number(id)),
+    enabled: !!id,
+  });
+
   // Debug: log para verificar os dados carregados
   console.log('Product loaded:', product);
   console.log('Insumos loaded:', insumos);
+  console.log('Componentes loaded:', componentes);
 
   const adicionarComponenteMutation = useMutation({
     mutationFn: (data: AdicionarIngredienteDto) => {
@@ -57,6 +65,7 @@ const ProductDetail = () => {
         description: 'O componente foi adicionado com sucesso.',
       });
       queryClient.invalidateQueries({ queryKey: ['product', id] });
+      queryClient.invalidateQueries({ queryKey: ['product-components', id] });
       setIsDialogOpen(false);
     },
     onError: (error: any) => {
@@ -85,6 +94,7 @@ const ProductDetail = () => {
         description: 'A quantidade foi atualizada com sucesso.',
       });
       queryClient.invalidateQueries({ queryKey: ['product', id] });
+      queryClient.invalidateQueries({ queryKey: ['product-components', id] });
     },
     onError: () => {
       toast({
@@ -103,6 +113,7 @@ const ProductDetail = () => {
         description: 'O componente foi removido com sucesso.',
       });
       queryClient.invalidateQueries({ queryKey: ['product', id] });
+      queryClient.invalidateQueries({ queryKey: ['product-components', id] });
     },
     onError: () => {
       toast({
@@ -125,7 +136,7 @@ const ProductDetail = () => {
     adicionarComponenteMutation.mutate(data);
   };
 
-  if (isLoadingProduct || isLoadingInsumos) return <div className="flex justify-center p-8">Carregando detalhes do produto...</div>;
+  if (isLoadingProduct || isLoadingInsumos || isLoadingComponentes) return <div className="flex justify-center p-8">Carregando detalhes do produto...</div>;
   
   if (!product) return <div className="text-red-500 p-4">Produto não encontrado</div>;
 
@@ -187,9 +198,9 @@ const ProductDetail = () => {
         </Button>
       </div>
 
-      {product.componenteProdutoDtoSet && product.componenteProdutoDtoSet.length > 0 ? (
+      {componentes && componentes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {product.componenteProdutoDtoSet.map((componente) => (
+          {componentes.map((componente) => (
             <ComponenteCard 
               key={componente.id || `${componente.insumoId}-${Date.now()}`}
               componente={componente}
