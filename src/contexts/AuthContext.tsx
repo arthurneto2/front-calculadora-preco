@@ -27,7 +27,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = localStorage.getItem('token');
 
     if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Erro ao carregar dados do usuário:', e);
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+      }
     }
     
     setIsLoading(false);
@@ -37,15 +43,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsLoading(true);
       const data = await login(credentials);
-      localStorage.setItem('token', data.tokenJwt);
-      localStorage.setItem('user', JSON.stringify(data));
-      setUser(data);
-      toast({
-        title: 'Login bem-sucedido',
-        description: `Bem-vindo, ${data.user.name}!`,
-      });
-      // Alterando o redirecionamento após login para a página inicial "/" em vez de "/calculator"
-      navigate('/');
+      
+      // Garantindo que o token está sendo armazenado corretamente
+      if (data && data.tokenJwt) {
+        localStorage.setItem('token', data.tokenJwt);
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
+        
+        toast({
+          title: 'Login bem-sucedido',
+          description: `Bem-vindo, ${data.user.name}!`,
+        });
+        
+        // Redirecionando para a página inicial
+        navigate('/');
+      } else {
+        throw new Error('Token não recebido do servidor');
+      }
     } catch (error: any) {
       toast({
         title: 'Erro ao fazer login',

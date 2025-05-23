@@ -1,3 +1,4 @@
+
 import api from './api';
 import { ProductDto, AdicionarIngredienteDto, ComponenteProdutoDto } from '@/types/product';
 
@@ -60,6 +61,7 @@ export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: Ad
     }
 
     console.log(`Adicionando insumo ao produto ${idProduto}:`, adicionarInsumoDto);
+    // Corrigindo o endpoint - o backend espera que seja usado /produto/{id}
     const response = await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
     console.log('Resposta do servidor:', response.data);
   } catch (error) {

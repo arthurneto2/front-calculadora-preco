@@ -29,11 +29,13 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       
-      // Adicionar um pequeno delay para dar tempo à requisição atual terminar
-      // antes de redirecionar, evitando loops de redirecionamento
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 100);
+      // Para evitar loops de redirecionamento, verificamos se já estamos na página de login
+      if (!window.location.pathname.includes('/login')) {
+        // Usar setTimeout para dar tempo de finalizar a requisição atual
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 100);
+      }
     }
     return Promise.reject(error);
   }
