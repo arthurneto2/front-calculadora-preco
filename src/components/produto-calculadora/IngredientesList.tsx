@@ -10,10 +10,15 @@ interface IngredientesListProps {
 }
 
 export const IngredientesList = ({ ingredientes, insumos }: IngredientesListProps) => {
+  // Debug: log para verificar os dados
+  console.log('Ingredientes recebidos:', ingredientes);
+  console.log('Insumos para busca:', insumos);
+
   // Function to find insumo name
   const getInsumoNome = (insumoId: number) => {
     const insumo = insumos?.find(i => i.id === insumoId);
-    return insumo?.nome || 'Insumo não encontrado';
+    console.log(`Buscando insumo ID ${insumoId}:`, insumo);
+    return insumo?.nome || `Insumo ID: ${insumoId}`;
   };
 
   // Function to find insumo cost
@@ -43,9 +48,17 @@ export const IngredientesList = ({ ingredientes, insumos }: IngredientesListProp
             </TableHeader>
             <TableBody>
               {ingredientes.map((ingrediente) => {
+                // Prioriza dados que vêm do componente, senão busca do insumo
                 const insumoNome = ingrediente.insumoNome || getInsumoNome(ingrediente.insumoId);
-                const custoUn = ingrediente.insumoCustoUn || getInsumoCustoUn(ingrediente.insumoId);
+                const custoUn = ingrediente.insumoCustoUn ?? getInsumoCustoUn(ingrediente.insumoId);
                 const custoTotal = custoUn * ingrediente.quantidade;
+                
+                console.log(`Ingrediente ${ingrediente.insumoId}:`, {
+                  nome: insumoNome,
+                  custoUn,
+                  quantidade: ingrediente.quantidade,
+                  custoTotal
+                });
                 
                 return (
                   <TableRow key={ingrediente.id || `${ingrediente.insumoId}-${ingrediente.quantidade}`}>

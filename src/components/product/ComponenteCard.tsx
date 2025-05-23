@@ -27,11 +27,19 @@ export function ComponenteCard({
   const [isEditing, setIsEditing] = useState(false);
   const [quantidade, setQuantidade] = useState(componente.quantidade);
   
+  // Debug: log para verificar os dados
+  console.log('Componente:', componente);
+  console.log('Insumos disponíveis:', insumos);
+  console.log('Procurando insumo com ID:', componente.insumoId);
+  
   // Encontra o insumo correspondente
   const insumo = insumos.find(i => i.id === componente.insumoId);
-  const insumoNome = componente.insumoNome || insumo?.nome || 'Insumo não encontrado';
-  const insumoCustoUn = componente.insumoCustoUn || insumo?.custoUn || 0;
-  const unidadeMedida = insumo?.unMedida || '';
+  console.log('Insumo encontrado:', insumo);
+  
+  // Prioriza os dados que vêm do componente, senão busca do insumo
+  const insumoNome = componente.insumoNome || insumo?.nome || `Insumo ID: ${componente.insumoId}`;
+  const insumoCustoUn = componente.insumoCustoUn ?? insumo?.custoUn ?? 0;
+  const unidadeMedida = insumo?.unMedida || 'un';
   
   // Calcula o custo total
   const custoTotal = insumoCustoUn * componente.quantidade;

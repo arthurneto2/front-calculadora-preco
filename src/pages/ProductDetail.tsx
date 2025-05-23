@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -42,6 +41,10 @@ const ProductDetail = () => {
     queryKey: ['insumos'],
     queryFn: getAllInsumos,
   });
+
+  // Debug: log para verificar os dados carregados
+  console.log('Product loaded:', product);
+  console.log('Insumos loaded:', insumos);
 
   const adicionarComponenteMutation = useMutation({
     mutationFn: (data: AdicionarIngredienteDto) => {
@@ -122,7 +125,7 @@ const ProductDetail = () => {
     adicionarComponenteMutation.mutate(data);
   };
 
-  if (isLoadingProduct) return <div className="flex justify-center p-8">Carregando detalhes do produto...</div>;
+  if (isLoadingProduct || isLoadingInsumos) return <div className="flex justify-center p-8">Carregando detalhes do produto...</div>;
   
   if (!product) return <div className="text-red-500 p-4">Produto não encontrado</div>;
 
