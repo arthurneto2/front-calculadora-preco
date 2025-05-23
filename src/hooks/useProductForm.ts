@@ -54,7 +54,8 @@ export const useProductForm = () => {
         title: 'Produto criado',
         description: 'O produto foi criado com sucesso.',
       });
-      navigate('/products');
+      // Fix redirect - use / instead of /products
+      navigate('/');
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
     onError: (error) => {
@@ -74,7 +75,8 @@ export const useProductForm = () => {
         title: 'Produto atualizado',
         description: 'O produto foi atualizado com sucesso.',
       });
-      navigate('/products');
+      // Fix redirect - use / instead of /products
+      navigate('/');
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
     onError: (error) => {
@@ -105,7 +107,7 @@ export const useProductForm = () => {
   };
 
   const handleCancel = () => {
-    navigate('/products');
+    navigate('/');
   };
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
