@@ -38,7 +38,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/produto/new" 
+                path="/produto/novo" 
                 element={
                   <ProtectedRoute>
                     <ProductForm />
@@ -46,7 +46,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/produto/edit/:id" 
+                path="/produto/editar/:id" 
                 element={
                   <ProtectedRoute>
                     <ProductForm />
@@ -70,7 +70,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/insumos/new" 
+                path="/insumos/novo" 
                 element={
                   <ProtectedRoute>
                     <InsumoForm />
@@ -78,7 +78,7 @@ const App = () => {
                 } 
               />
               <Route 
-                path="/insumos/edit/:id" 
+                path="/insumos/editar/:id" 
                 element={
                   <ProtectedRoute>
                     <InsumoForm />

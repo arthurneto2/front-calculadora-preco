@@ -15,7 +15,7 @@ export const createProduct = async (product: ProductDto): Promise<ProductDto> =>
 
 // Função para listar todos os produtos
 export const getAllProducts = async (): Promise<ProductDto[]> => {
-  const response = await api.get<ProductDto[]>('/produto');
+  const response = await api.get<ProductDto[]>('/produto/list-all');
   return response.data;
 };
 
@@ -27,13 +27,13 @@ export const getProductById = async (id: number): Promise<ProductDto> => {
 
 // Função para atualizar um produto
 export const updateProduct = async (product: ProductDto): Promise<ProductDto> => {
-  const response = await api.put<ProductDto>('/produto', product);
+  const response = await api.put<ProductDto>('/produto/update-produto', product);
   return response.data;
 };
 
 // Função para deletar um produto
 export const deleteProduct = async (id: number): Promise<void> => {
-  await api.delete(`/produto?id=${id}`);
+  await api.delete(`/produto/${id}`);
 };
 
 // Função para adicionar ingrediente ao produto
@@ -49,17 +49,17 @@ export const calcularPrecoProduto = async (idProduto: number): Promise<ProductDt
 
 // Função para adicionar insumos ao produto
 export const adicionarInsumos = async (idProduto: number, adicionarInsumoDto: AdicionarIngredienteDto): Promise<void> => {
-  await api.post(`/produto/${idProduto}`, adicionarInsumoDto);
+  await api.post(`/produto/${idProduto}/componente`, adicionarInsumoDto);
 };
 
 // Função para atualizar quantidade de um componente
 export const updateQuantComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
-  await api.put(`/produto/${idProduto}`, componente);
+  await api.put(`/produto/${idProduto}/update-componente`, componente);
 };
 
 // Função para deletar um componente
 export const deleteComponente = async (idProduto: number, componente: ComponenteProdutoDto): Promise<void> => {
-  await api.delete(`/produto/${idProduto}`, { data: componente });
+  await api.delete(`/produto/${idProduto}/componente`, { data: componente });
 };
 
 // Interfaces e função para cálculo de preço

@@ -1,11 +1,19 @@
 
-import { ProductFormValues } from '@/types/product';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
+import { Control } from 'react-hook-form';
+import { 
+  FormControl, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { UseFormReturn } from 'react-hook-form';
+import { ProductFormValues } from '@/types/product';
 
 interface ProductFormFieldsProps {
-  form: UseFormReturn<ProductFormValues>;
+  form: {
+    control: Control<ProductFormValues>;
+  };
 }
 
 export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
@@ -16,18 +24,15 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
         name="nome"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Nome</FormLabel>
+            <FormLabel>Nome do Produto</FormLabel>
             <FormControl>
-              <Input placeholder="Nome do produto" {...field} />
+              <Input placeholder="Digite o nome do produto" {...field} />
             </FormControl>
-            <FormDescription>
-              Digite o nome do seu produto.
-            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
       />
-      
+
       <FormField
         control={form.control}
         name="margemDeLucro"
@@ -37,15 +42,11 @@ export const ProductFormFields = ({ form }: ProductFormFieldsProps) => {
             <FormControl>
               <Input 
                 type="number" 
-                step="0.01" 
-                placeholder="0.00" 
-                {...field}
-                onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                placeholder="Ex: 30" 
+                {...field} 
+                onChange={(e) => field.onChange(e.target.valueAsNumber)}
               />
             </FormControl>
-            <FormDescription>
-              Defina a margem de lucro desejada para este produto.
-            </FormDescription>
             <FormMessage />
           </FormItem>
         )}

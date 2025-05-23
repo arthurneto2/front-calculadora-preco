@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -141,7 +142,7 @@ const ProductDetail = () => {
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle>Informações Gerais</CardTitle>
-            <Link to={`/produto/edit/${id}`}>
+            <Link to={`/produto/editar/${id}`}>
               <Button variant="outline" size="sm">
                 <Edit className="mr-2" size={16} />
                 Editar
