@@ -42,24 +42,25 @@ const ProductDetail = () => {
     queryFn: getAllInsumos,
   });
 
-  // Query para buscar componentes usando o novo endpoint
+  // Query principal usando o novo endpoint que retorna dados mais completos
   const { data: componentes, isLoading: isLoadingComponentes } = useQuery({
     queryKey: ['product-components', id],
     queryFn: () => getProductComponents(Number(id)),
     enabled: !!id,
   });
 
-  // Debug detalhado para verificar os dados carregados
-  console.log('=== ProductDetail Debug ===');
+  // Debug para verificar os dados mais completos vindos do novo endpoint
+  console.log('=== ProductDetail - Novo Endpoint Debug ===');
   console.log('Product ID:', id);
-  console.log('Product loaded:', product);
-  console.log('Insumos loaded:', insumos);
-  console.log('Componentes from new endpoint:', componentes);
-  console.log('Is loading states:', {
-    product: isLoadingProduct,
-    insumos: isLoadingInsumos,
-    componentes: isLoadingComponentes
-  });
+  console.log('Componentes from new endpoint (dados completos):', componentes);
+  console.log('Cada componente tem os dados:', componentes?.map(c => ({
+    id: c.id,
+    insumoId: c.insumoId,
+    insumoNome: c.insumoNome,
+    insumoCustoUn: c.insumoCustoUn,
+    quantidade: c.quantidade,
+    insumoAninhado: c.insumo
+  })));
 
   const adicionarComponenteMutation = useMutation({
     mutationFn: (data: AdicionarIngredienteDto) => {
@@ -208,7 +209,14 @@ const ProductDetail = () => {
       {componentes && componentes.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {componentes.map((componente) => {
-            console.log('Renderizando componente:', componente);
+            console.log('=== Renderizando componente com dados completos ===');
+            console.log('Componente:', componente);
+            console.log('Dados diretos:', {
+              insumoNome: componente.insumoNome,
+              insumoCustoUn: componente.insumoCustoUn
+            });
+            console.log('Dados aninhados do insumo:', componente.insumo);
+            
             return (
               <ComponenteCard 
                 key={componente.id || `${componente.insumoId}-${Date.now()}`}

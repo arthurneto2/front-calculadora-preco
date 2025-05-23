@@ -27,36 +27,37 @@ export function ComponenteCard({
   const [isEditing, setIsEditing] = useState(false);
   const [quantidade, setQuantidade] = useState(componente.quantidade);
   
-  // Debug detalhado para verificar os dados
-  console.log('=== ComponenteCard Debug ===');
-  console.log('Componente completo:', JSON.stringify(componente, null, 2));
-  console.log('InsumoId do componente:', componente.insumoId);
-  console.log('Lista de insumos disponíveis:', insumos?.map(i => ({ id: i.id, nome: i.nome })));
+  // Debug otimizado para o novo endpoint
+  console.log('=== ComponenteCard - Dados do Novo Endpoint ===');
+  console.log('Componente ID:', componente.id);
+  console.log('InsumoId:', componente.insumoId);
+  console.log('Dados diretos do componente:', {
+    nome: componente.insumoNome,
+    custoUn: componente.insumoCustoUn
+  });
+  console.log('Dados do insumo aninhado:', componente.insumo);
   
-  // Encontra o insumo correspondente na lista de insumos
-  const insumoFromList = insumos?.find(i => i.id === componente.insumoId);
-  console.log('Insumo da lista encontrado:', insumoFromList);
-  
-  // Prioridade: dados do componente > dados aninhados do insumo > insumo da lista > fallback
+  // Lógica otimizada: priorizar dados que vêm diretamente do endpoint
   const insumoNome = componente.insumoNome || 
                      componente.insumo?.nome || 
-                     insumoFromList?.nome || 
+                     insumos?.find(i => i.id === componente.insumoId)?.nome ||
                      `Insumo não encontrado (ID: ${componente.insumoId})`;
                      
   const insumoCustoUn = componente.insumoCustoUn ?? 
                         componente.insumo?.custoUn ?? 
-                        insumoFromList?.custoUn ?? 
+                        insumos?.find(i => i.id === componente.insumoId)?.custoUn ?? 
                         0;
                         
   const unidadeMedida = componente.insumo?.unMedida || 
-                        insumoFromList?.unMedida || 
+                        insumos?.find(i => i.id === componente.insumoId)?.unMedida || 
                         'un';
   
-  console.log('Dados finais para exibição:', {
+  console.log('Dados finais processados:', {
     nome: insumoNome,
     custoUn: insumoCustoUn,
     unidade: unidadeMedida,
-    quantidade: componente.quantidade
+    quantidade: componente.quantidade,
+    temDadosCompletos: !!(componente.insumoNome && componente.insumoCustoUn)
   });
   
   // Calcula o custo total
@@ -68,20 +69,31 @@ export function ComponenteCard({
   };
   
   return (
-    <Card>
+    <Card className="hover:shadow-md transition-shadow">
       <CardHeader>
-        <CardTitle className="text-lg">{insumoNome}</CardTitle>
+        <CardTitle className="text-lg flex items-center justify-between">
+          {insumoNome}
+          {componente.insumoNome && componente.insumoCustoUn && (
+            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+              Dados Completos
+            </span>
+          )}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="text-sm font-medium text-gray-500">Custo Unitário:</div>
-          <div className="text-sm">R$ {insumoCustoUn.toFixed(2)}</div>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex flex-col">
+            <span className="font-medium text-gray-600">Custo Unitário:</span>
+            <span className="font-semibold text-lg">R$ {insumoCustoUn.toFixed(2)}</span>
+          </div>
           
-          <div className="text-sm font-medium text-gray-500">Unidade:</div>
-          <div className="text-sm">{unidadeMedida}</div>
+          <div className="flex flex-col">
+            <span className="font-medium text-gray-600">Unidade:</span>
+            <span>{unidadeMedida}</span>
+          </div>
           
-          <div className="text-sm font-medium text-gray-500">Quantidade:</div>
-          <div className="text-sm">
+          <div className="flex flex-col">
+            <span className="font-medium text-gray-600">Quantidade:</span>
             {isEditing ? (
               <Input 
                 type="number" 
@@ -89,22 +101,26 @@ export function ComponenteCard({
                 onChange={(e) => setQuantidade(Number(e.target.value))} 
                 step="0.01"
                 min="0"
+                className="mt-1"
               />
             ) : (
-              <span>{componente.quantidade}</span>
+              <span className="font-semibold">{componente.quantidade}</span>
             )}
           </div>
           
-          <div className="text-sm font-medium text-gray-500">Custo Total:</div>
-          <div className="text-sm">R$ {custoTotal.toFixed(2)}</div>
+          <div className="flex flex-col">
+            <span className="font-medium text-gray-600">Custo Total:</span>
+            <span className="font-bold text-lg text-primary">R$ {custoTotal.toFixed(2)}</span>
+          </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
+      <CardFooter className="flex justify-between pt-4">
         {isEditing ? (
           <Button 
             onClick={handleSave} 
             disabled={isUpdating}
             size="sm"
+            className="flex-1 mr-2"
           >
             <Save className="mr-2" size={16} />
             Salvar
@@ -114,6 +130,7 @@ export function ComponenteCard({
             variant="outline" 
             onClick={() => setIsEditing(true)} 
             size="sm"
+            className="flex-1 mr-2"
           >
             <Edit className="mr-2" size={16} />
             Editar
