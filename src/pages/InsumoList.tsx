@@ -8,7 +8,6 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import Navbar from '@/components/Navbar';
 
 const InsumoList = () => {
   const { toast } = useToast();

@@ -55,7 +55,7 @@ export const useInsumoForm = () => {
         title: 'Insumo criado',
         description: 'O insumo foi criado com sucesso.',
       });
-      navigate('/insumos');
+      navigate('/insumo');
       queryClient.invalidateQueries({ queryKey: ['insumos'] });
     },
     onError: () => {
@@ -74,7 +74,7 @@ export const useInsumoForm = () => {
         title: 'Insumo atualizado',
         description: 'O insumo foi atualizado com sucesso.',
       });
-      navigate('/insumos');
+      navigate('/insumo');
       queryClient.invalidateQueries({ queryKey: ['insumos'] });
     },
     onError: () => {
@@ -104,7 +104,7 @@ export const useInsumoForm = () => {
   };
 
   const handleCancel = () => {
-    navigate('/insumos');
+    navigate('/insumo');
   };
 
   const isSubmitting = createMutation.isPending || updateMutation.isPending;
