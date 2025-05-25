@@ -64,6 +64,7 @@ export const deleteComponente = async (idProduto: number, componente: Componente
 // Nova função para listar componentes do produto
 export const getProductComponents = async (idProduto: number): Promise<ComponenteProdutoDto[]> => {
   const response = await api.get<ComponenteProdutoDto[]>(`/produto/${idProduto}/list-all/componente`);
+  console.log("AQUI CARAI", response.data)
   return response.data;
 };
 

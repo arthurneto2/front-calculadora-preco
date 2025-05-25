@@ -1,12 +1,8 @@
 
 export interface ComponenteProdutoDto {
   id?: number;
-  insumoId: number;
   quantidade: number;
-  insumoNome?: string;
-  insumoCustoUn?: number;
-  // Adicionando campos que podem vir do backend
-  insumo?: {
+  insumoDto?: {
     id: number;
     nome: string;
     custoUn: number;

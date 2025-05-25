@@ -30,26 +30,24 @@ export function ComponenteCard({
   // Debug otimizado para o novo endpoint
   console.log('=== ComponenteCard - Dados do Novo Endpoint ===');
   console.log('Componente ID:', componente.id);
-  console.log('InsumoId:', componente.insumoId);
-  console.log('Dados diretos do componente:', {
-    nome: componente.insumoNome,
-    custoUn: componente.insumoCustoUn
+  console.log("Quantidade: ", componente.quantidade)
+  console.log('Dados do insumo no componente:', {
+    id: componente.insumoDto.id,
+    nome: componente.insumoDto.nome,
+    custoUn: componente.insumoDto.custoUn,
+    unMedida: componente.insumoDto.unMedida,
+
   });
-  console.log('Dados do insumo aninhado:', componente.insumo);
   
   // Lógica otimizada: priorizar dados que vêm diretamente do endpoint
-  const insumoNome = componente.insumoNome || 
-                     componente.insumo?.nome || 
-                     insumos?.find(i => i.id === componente.insumoId)?.nome ||
-                     `Insumo não encontrado (ID: ${componente.insumoId})`;
+  const insumoNome = componente.insumoDto.nome || 
+                     `Insumo não encontrado (ID: ${componente.insumoDto.id})`;
                      
-  const insumoCustoUn = componente.insumoCustoUn ?? 
-                        componente.insumo?.custoUn ?? 
-                        insumos?.find(i => i.id === componente.insumoId)?.custoUn ?? 
+  const insumoCustoUn = componente.insumoDto.custoUn ?? 
+                        insumos?.find(i => i.id === componente.insumoDto.id) ?? 
                         0;
                         
-  const unidadeMedida = componente.insumo?.unMedida || 
-                        insumos?.find(i => i.id === componente.insumoId)?.unMedida || 
+  const unidadeMedida = componente.insumoDto?.unMedida || 
                         'un';
   
   console.log('Dados finais processados:', {
