@@ -55,11 +55,11 @@ const ProductDetail = () => {
   console.log('Componentes from new endpoint (dados completos):', componentes);
   console.log('Cada componente tem os dados:', componentes?.map(c => ({
     id: c.id,
-    insumoId: c.insumoId,
-    insumoNome: c.insumoNome,
-    insumoCustoUn: c.insumoCustoUn,
+    insumoId: c.insumoDto.id,
+    insumoNome: c.insumoDto.nome,
+    insumoCustoUn: c.insumoDto.custoUn,
     quantidade: c.quantidade,
-    insumoAninhado: c.insumo
+    insumoAninhado: c.insumoDto
   })));
 
   const adicionarComponenteMutation = useMutation({
@@ -212,14 +212,14 @@ const ProductDetail = () => {
             console.log('=== Renderizando componente com dados completos ===');
             console.log('Componente:', componente);
             console.log('Dados diretos:', {
-              insumoNome: componente.insumoNome,
-              insumoCustoUn: componente.insumoCustoUn
+              insumoNome: componente.insumoDto.nome,
+              insumoCustoUn: componente.insumoDto.custoUn
             });
-            console.log('Dados aninhados do insumo:', componente.insumo);
+            console.log('Dados aninhados do insumo:', componente.insumoDto);
             
             return (
               <ComponenteCard 
-                key={componente.id || `${componente.insumoId}-${Date.now()}`}
+                key={componente.id || `${componente.insumoDto.id}-${Date.now()}`}
                 componente={componente}
                 insumos={insumos || []}
                 onUpdateQuantidade={handleUpdateQuantidade}
