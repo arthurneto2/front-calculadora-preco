@@ -21,7 +21,8 @@ Interface web para interagir com a API de cálculo de custos, permitindo:
   ![shadcn-ui](https://img.shields.io/badge/shadcn--ui-0.5.x-%23000000?logo=react)  
   ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-%2338B2AC?logo=tailwind-css)
 
-## 🚀 Execução  
+## 🚀 Execução 
+```bash
 git clone https://github.com/arthurneto2/front-calculadora-preco.git
 cd frontend  # Entre na pasta do frontend (se aplicável)
 npm install  # Instale as dependências
