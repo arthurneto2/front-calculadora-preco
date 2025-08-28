@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build:
+      context: .
+    container_name: frontend
+    ports:
+      - "3000:80"
+    networks:
+      - front-net
+
+networks:
+  front-net:
+    name: front-net
+    external: true
