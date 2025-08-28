@@ -22,11 +22,10 @@ Interface web para interagir com a API de cálculo de custos, permitindo:
   ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-%2338B2AC?logo=tailwind-css)
 
 ## 🚀 Execução 
-```bash
 1. **Clone o repositório**:
    ```bash
    git clone https://github.com/arthurneto2/front-calculadora-preco.git
    cd product-price-front-end/
 2. **Suba os containers**:
     ```bash
-    docker-compose up -d (o container do bacnkend já deve está rodando)
+    docker compose up -d (o container do bacnkend já deve está rodando)
