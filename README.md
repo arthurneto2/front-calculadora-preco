@@ -23,7 +23,10 @@ Interface web para interagir com a API de cálculo de custos, permitindo:
 
 ## 🚀 Execução 
 ```bash
-git clone https://github.com/arthurneto2/front-calculadora-preco.git
-cd frontend  # Entre na pasta do frontend (se aplicável)
-npm install  # Instale as dependências
-npm run dev  # Inicie o servidor de desenvolvimento
+1. **Clone o repositório**:
+   ```bash
+   git clone https://github.com/arthurneto2/front-calculadora-preco.git
+   cd product-price-front-end/
+2. **Suba os containers**:
+    ```bash
+    docker-compose up -d (o container do bacnkend já deve está rodando)
